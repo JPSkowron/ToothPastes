@@ -9,6 +9,8 @@
 #import "adoredToothPastesViewController.h"
 #import "ToothPastesTableViewController.h"
 
+#define kNSUserDefaultsLastSavedKey @"lastSavedKey"
+
 @interface adoredToothPastesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property NSMutableArray *adoredThoothpastes;
 @property (strong, nonatomic) IBOutlet UITableView *toothPastesTableView;
@@ -39,7 +41,12 @@
 -(void)save{
 
     NSURL *plist = [[self documentsDirectory] URLByAppendingPathComponent:@"pastes.plist"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
     [self.adoredThoothpastes writeToURL:plist atomically:YES];
+
+    [userDefaults setObject:[NSDate date] forKey:kNSUserDefaultsLastSavedKey];
+    [userDefaults synchronize];
 
 }
 -(IBAction)unwindFromToothPasteViewController:(UIStoryboardSegue *)segue {
